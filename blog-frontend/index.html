@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="一个自托管个人博客模板，用于记录文章、笔记、项目、播客和照片。"
+    />
+    <script>
+      (() => {
+        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        document.documentElement.dataset.theme = systemTheme
+        document.documentElement.classList.toggle('dark', systemTheme === 'dark')
+      })()
+    </script>
+    <link id="app-favicon" rel="icon" href="/favicon-dark.svg?v=20260314d" type="image/svg+xml" />
+    <script>
+      (() => {
+        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        const favicon = document.querySelector('#app-favicon')
+        if (favicon)
+          favicon.setAttribute('href', `${systemTheme === 'dark' ? '/favicon-dark.svg' : '/favicon-light.svg'}?v=20260314d`)
+      })()
+    </script>
+    <title>Personal Blog</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

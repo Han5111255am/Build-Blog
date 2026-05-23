@@ -1,0 +1,26 @@
+{
+  "name": "blog-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite-ssg build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "katex": "^0.16.44",
+    "motion-v": "^2.2.1",
+    "pixi.js": "^8.17.0",
+    "simplex-noise": "^4.0.3",
+    "vite-ssg": "^27.1.0",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@unocss/vite": "^66.0.0",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "unocss": "^66.0.0",
+    "vite": "^6.2.0"
+  }
+}

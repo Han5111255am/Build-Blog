@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "personal-blog-backend"
+version = "0.2.0"
+description = "Django backend for a self-hosted personal blog."
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "Django==5.2.11",
+    "djangorestframework==3.16.1",
+    "django-filter==25.2",
+    "django-redis==6.0.0",
+    "bleach==6.2.0",
+    "python-dotenv==1.1.1",
+    "celery==5.6.2",
+    "kombu==5.6.2",
+    "redis==7.2.1",
+    "Markdown==3.10.2",
+    "pymdown-extensions==10.21",
+    "beautifulsoup4==4.13.3",
+    "mysqlclient==2.2.8",
+    "gunicorn==25.1.0",
+    "Pillow==11.2.1",
+    "django-storages",
+    "boto3",
+]
+
+[project.optional-dependencies]
+dev = []
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["apps*", "config*"]
+
+[tool.setuptools]
+include-package-data = true

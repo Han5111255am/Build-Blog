@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Blog favicon">
+  <rect width="64" height="64" rx="14" fill="#111827"/>
+  <path d="M18 17h28v30H18z" fill="#f8fafc"/>
+  <path d="M23 23h18M23 30h18M23 37h12" stroke="#111827" stroke-width="3" stroke-linecap="round"/>
+  <path d="M43 43l5 5" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
+</svg>
