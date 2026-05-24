@@ -105,3 +105,7 @@ For Django production deployment, use Gunicorn/Uvicorn with Nginx, and update `.
 ## License
 
 This project is open-sourced under the [MIT License](LICENSE).
+
+## Acknowledgements
+
+This project is built on top of and adapted from [antfu/antfu.me](https://github.com/antfu/antfu.me). The original code is copyrighted by Anthony Fu and distributed under the MIT License.

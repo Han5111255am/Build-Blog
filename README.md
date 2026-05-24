@@ -105,3 +105,7 @@ Django 生产部署建议使用 Gunicorn/Uvicorn + Nginx，并将 `.env` 中的 
 ## 开源协议
 
 本项目基于 [MIT License](LICENSE) 开源。
+
+## 致谢
+
+本项目基于 [antfu/antfu.me](https://github.com/antfu/antfu.me) 的开源代码进行二次改造与扩展。原始代码版权归 Anthony Fu 所有，并遵循 MIT License。
