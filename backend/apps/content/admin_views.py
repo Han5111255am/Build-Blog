@@ -17,6 +17,7 @@ from .admin_serializers import (
     AccountProfileReadSerializer,
     AccountProfileSerializer,
     AdminAssetSerializer,
+    AdminFriendLinkSerializer,
     AdminNoteSerializer,
     AdminPhotoSerializer,
     AdminPostSerializer,
@@ -26,6 +27,8 @@ from .admin_serializers import (
     AdminTagSerializer,
     AssetUploadSerializer,
     CurrentUserSerializer,
+    FriendLinkApproveSerializer,
+    FriendLinkRejectSerializer,
     IdListSerializer,
     LoginSerializer,
     PasswordChangeSerializer,
@@ -38,11 +41,11 @@ from .analytics_services import get_dashboard_analytics_payload
 from .api_utils import AdminPageNumberPagination, parse_admin_datetime, success_response
 from .cache_utils import cache, invalidate_pattern
 from config.celery import app as celery_app
-from .models import Asset, Note, Photo, Podcast, Post, Project, StatusChoices, Tag, UserPreference
+from .models import Asset, FriendLink, Note, Photo, Podcast, Post, Project, StatusChoices, Tag, UserPreference
 from .performance_monitoring import build_performance_summary_payload
 from .search_services import search_content
 from .tasks import _markdown_to_html
-from .views import get_internal_health_payload
+from .views import get_internal_health_payload, invalidate_friend_link_cache
 
 
 SYSTEM_TASK_EVENT_LIMIT = 12
@@ -1144,6 +1147,77 @@ class AdminTagViewSet(AdminLookupMixin, AdminResponseMixin, viewsets.ModelViewSe
         refreshed_tag = self.get_queryset().get(pk=tag.pk)
         response_serializer = self.get_serializer(refreshed_tag)
         return success_response(response_serializer.data, message="Tag reference removed successfully.")
+
+
+class AdminFriendLinkViewSet(AdminLookupMixin, AdminResponseMixin, viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = FriendLink.objects.all().order_by("display_order", "-updated_at")
+    serializer_class = AdminFriendLinkSerializer
+    pagination_class = AdminPageNumberPagination
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ["status"]
+    search_fields = ["site_name", "site_url", "description", "contact_email"]
+    ordering_fields = ["display_order", "created_at", "updated_at", "reviewed_at", "site_name"]
+    ordering = ["display_order", "-updated_at"]
+
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        if instance.status == FriendLink.Status.APPROVED and not instance.reviewed_at:
+            instance.reviewed_at = timezone.now()
+            instance.save(update_fields=["reviewed_at", "updated_at"])
+        invalidate_friend_link_cache()
+
+    def perform_update(self, serializer):
+        previous_status = serializer.instance.status
+        instance = serializer.save()
+        if instance.status == FriendLink.Status.APPROVED and previous_status != FriendLink.Status.APPROVED and not instance.reviewed_at:
+            instance.reviewed_at = timezone.now()
+            instance.save(update_fields=["reviewed_at", "updated_at"])
+        invalidate_friend_link_cache()
+
+    def perform_destroy(self, instance):
+        instance.delete()
+        invalidate_friend_link_cache()
+
+    @action(detail=True, methods=["post"], url_path="approve")
+    def approve(self, request, pk=None):
+        friend_link = self.get_object()
+        serializer = FriendLinkApproveSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        if "display_order" in serializer.validated_data:
+            friend_link.display_order = serializer.validated_data["display_order"]
+        review_note = serializer.validated_data.get("review_note", "")
+        friend_link.review_note = review_note
+        friend_link.status = FriendLink.Status.APPROVED
+        friend_link.reviewed_at = timezone.now()
+        friend_link.save(update_fields=["status", "display_order", "review_note", "reviewed_at", "updated_at"])
+        invalidate_friend_link_cache()
+        serializer = self.get_serializer(friend_link)
+        return success_response(serializer.data, message="Friend link approved successfully.")
+
+    @action(detail=True, methods=["post"], url_path="reject")
+    def reject(self, request, pk=None):
+        friend_link = self.get_object()
+        serializer = FriendLinkRejectSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        friend_link.status = FriendLink.Status.REJECTED
+        friend_link.review_note = serializer.validated_data.get("review_note", "")
+        friend_link.reviewed_at = timezone.now()
+        friend_link.save(update_fields=["status", "review_note", "reviewed_at", "updated_at"])
+        invalidate_friend_link_cache()
+        serializer = self.get_serializer(friend_link)
+        return success_response(serializer.data, message="Friend link rejected successfully.")
+
+    @action(detail=False, methods=["post"], url_path="reorder")
+    def reorder(self, request):
+        serializer = IdListSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        id_position_map = {friend_link_id: index for index, friend_link_id in enumerate(serializer.validated_data["ids"], start=1)}
+        for friend_link in FriendLink.objects.filter(id__in=id_position_map.keys()):
+            friend_link.display_order = id_position_map[friend_link.id]
+            friend_link.save(update_fields=["display_order", "updated_at"])
+        invalidate_friend_link_cache()
+        return success_response(None, message="Friend links reordered successfully.")
 
 
 class AdminProjectViewSet(AdminLookupMixin, AdminResponseMixin, viewsets.ModelViewSet):

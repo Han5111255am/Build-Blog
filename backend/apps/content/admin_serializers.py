@@ -15,6 +15,7 @@ from .asset_references import resolve_asset_reference
 from .html_sanitizer import sanitize_html_fields
 from .models import (
     Asset,
+    FriendLink,
     MotionLevelChoices,
     Note,
     Photo,
@@ -353,6 +354,64 @@ class LoginSerializer(serializers.Serializer):
 
 class IdListSerializer(serializers.Serializer):
     ids = serializers.ListField(child=serializers.IntegerField(min_value=1), allow_empty=False)
+
+
+class FriendLinkApproveSerializer(serializers.Serializer):
+    display_order = serializers.IntegerField(required=False, min_value=0)
+    review_note = serializers.CharField(required=False, allow_blank=True, max_length=500)
+
+    def validate_review_note(self, value):
+        return value.strip()
+
+
+class FriendLinkRejectSerializer(serializers.Serializer):
+    review_note = serializers.CharField(required=False, allow_blank=True, max_length=500)
+
+    def validate_review_note(self, value):
+        return value.strip()
+
+
+class AdminFriendLinkSerializer(serializers.ModelSerializer):
+    created_at = AdminDateTimeField(read_only=True)
+    updated_at = AdminDateTimeField(read_only=True)
+    reviewed_at = AdminDateTimeField(required=False, allow_null=True)
+
+    class Meta:
+        model = FriendLink
+        fields = [
+            "id",
+            "site_name",
+            "site_url",
+            "logo_url",
+            "description",
+            "contact_email",
+            "contact_note",
+            "review_note",
+            "status",
+            "display_order",
+            "reviewed_at",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = ["id", "created_at", "updated_at"]
+
+    def validate_site_name(self, value):
+        normalized = value.strip()
+        if not normalized:
+            raise serializers.ValidationError("Site name is required.")
+        return normalized
+
+    def validate_description(self, value):
+        return value.strip()
+
+    def validate_contact_note(self, value):
+        return value.strip()
+
+    def validate_review_note(self, value):
+        return value.strip()
+
+    def validate_logo_url(self, value):
+        return value.strip()
 
 
 class AdminContentSerializerMixin(serializers.ModelSerializer):

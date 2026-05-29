@@ -1213,8 +1213,8 @@ pre {
 
 @media (max-width: 640px) {
   .site-logo {
-    top: 0.8rem;
-    left: 0.45rem;
+    top: 0.45rem;
+    left: -0.72rem;
   }
 
   .site-nav {
@@ -1354,7 +1354,8 @@ pre {
 
 @media (max-width: 350px) {
   .site-logo {
-    left: 0.5rem;
+    top: 0.2rem;
+    left: -1.15rem;
   }
 
   .site-logo-image {

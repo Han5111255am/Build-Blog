@@ -8,7 +8,7 @@
         </p>
         <div class="project-action-links" :aria-label="t('projects.actionLinksAria')">
           <a
-            href="https://github.com/Han5111255am"
+            href="https://github.com/example"
             target="_blank"
             rel="noopener noreferrer"
             class="project-action-link project-action-link-blue"
@@ -24,7 +24,7 @@
             <span>GitHub</span>
           </a>
           <a
-            href="https://github.com/Han5111255am?tab=repositories"
+            href="https://github.com/example?tab=repositories"
             target="_blank"
             rel="noopener noreferrer"
             class="project-action-link project-action-link-amber"

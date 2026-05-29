@@ -2,7 +2,7 @@
 
 [English](README.en.md) | [个人博客示例站点](https://handsomenanblog.cyou/) | [MIT License](LICENSE)
 
-一个全栈个人博客项目，包含公开博客前台、后台管理端和 Django REST API。适合自托管技术博客、项目展示、笔记、播客和摄影内容。
+一个全栈个人博客项目，包含公开博客前台、后台管理端和 Django REST API。适合自托管技术博客、项目展示、笔记、友链、播客和摄影内容。
 
 ## 技术栈
 
@@ -10,7 +10,7 @@
 - 数据与队列：MySQL 8、Redis 7、RabbitMQ 3
 - 博客前台：Vue 3、Vue Router、Vite、Vite SSG、UnoCSS
 - 管理后台：React 18、TypeScript、TanStack Router、TanStack Query、React Hook Form、Zod、Tailwind CSS、Vite
-- 内容能力：Markdown、代码高亮、KaTeX 数学公式、HTML 清洗、图片/媒体资源管理
+- 内容能力：Markdown、代码高亮、KaTeX 数学公式、HTML 清洗、友链申请与审核、图片/媒体资源管理
 
 ## 目录结构
 

@@ -41,6 +41,8 @@ media/
 *.seed
 *.tmp
 output/
+logs/
+.playwright-mcp/
 
 # Node modules
 node_modules
@@ -51,3 +53,7 @@ blog-frontend/dist/
 
 # TypeScript incremental build cache
 *.tsbuildinfo
+admin-frontend/tailwind.config.d.ts
+admin-frontend/tailwind.config.js
+admin-frontend/vite.config.d.ts
+admin-frontend/vite.config.js

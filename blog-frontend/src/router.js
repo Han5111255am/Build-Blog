@@ -1,4 +1,6 @@
 import HomePage from './pages/HomePage.vue'
+import FriendLinkApplyPage from './pages/FriendLinkApplyPage.vue'
+import FriendsPage from './pages/FriendsPage.vue'
 import NotFoundPage from './pages/NotFoundPage.vue'
 import PhotosPage from './pages/PhotosPage.vue'
 import PodcastDetailPage from './pages/PodcastDetailPage.vue'
@@ -69,6 +71,18 @@ export const routes = [
     name: 'project-detail',
     component: ProjectDetailPage,
     meta: { title: '项目详情' },
+  },
+  {
+    path: '/friends',
+    name: 'friends',
+    component: FriendsPage,
+    meta: { title: 'Friends' },
+  },
+  {
+    path: '/friends/apply',
+    name: 'friend-link-apply',
+    component: FriendLinkApplyPage,
+    meta: { title: '申请友链' },
   },
   {
     path: '/podcasts',

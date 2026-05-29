@@ -59,6 +59,7 @@ const NoteEditPage = lazyPage(() => import('@/pages/notes/note-edit-page'), 'Not
 const ProjectListPage = lazyPage(() => import('@/pages/projects/project-list-page'), 'ProjectListPage')
 const ProjectCreatePage = lazyPage(() => import('@/pages/projects/project-create-page'), 'ProjectCreatePage')
 const ProjectEditPage = lazyPage(() => import('@/pages/projects/project-edit-page'), 'ProjectEditPage')
+const FriendLinkListPage = lazyPage(() => import('@/pages/friend-links/friend-link-list-page'), 'FriendLinkListPage')
 const TagListPage = lazyPage(() => import('@/pages/tags/tag-list-page'), 'TagListPage')
 const TagCreatePage = lazyPage(() => import('@/pages/tags/tag-create-page'), 'TagCreatePage')
 const TagEditPage = lazyPage(() => import('@/pages/tags/tag-edit-page'), 'TagEditPage')
@@ -87,6 +88,7 @@ const NoteEditRoutePage = withRouteSuspense(NoteEditPage)
 const ProjectListRoutePage = withRouteSuspense(ProjectListPage)
 const ProjectCreateRoutePage = withRouteSuspense(ProjectCreatePage)
 const ProjectEditRoutePage = withRouteSuspense(ProjectEditPage)
+const FriendLinkListRoutePage = withRouteSuspense(FriendLinkListPage)
 const TagListRoutePage = withRouteSuspense(TagListPage)
 const TagCreateRoutePage = withRouteSuspense(TagCreatePage)
 const TagEditRoutePage = withRouteSuspense(TagEditPage)
@@ -219,6 +221,12 @@ const projectEditRoute = createRoute({
   component: ProjectEditRoutePage,
 })
 
+const friendLinksRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: '/friend-links',
+  component: FriendLinkListRoutePage,
+})
+
 const tagsRoute = createRoute({
   getParentRoute: () => appRoute,
   path: '/tags',
@@ -329,6 +337,7 @@ const routeTree = rootRoute.addChildren([
     projectsRoute,
     projectCreateRoute,
     projectEditRoute,
+    friendLinksRoute,
     tagsRoute,
     tagCreateRoute,
     tagEditRoute,

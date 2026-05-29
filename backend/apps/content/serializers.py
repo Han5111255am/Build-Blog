@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from .asset_references import find_asset_by_url
 from .html_sanitizer import sanitize_html_fields
-from .models import Post, Note, Project, Photo, Podcast, Tag
+from .models import FriendLink, Post, Note, Project, Photo, Podcast, Tag
 
 
 # ─── Tag ───────────────────────────────────────────────────────────
@@ -13,6 +13,60 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
         fields = ['id', 'slug', 'name']
         read_only_fields = fields
+
+
+class FriendLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FriendLink
+        fields = [
+            'id',
+            'site_name',
+            'site_url',
+            'logo_url',
+            'description',
+            'display_order',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = fields
+
+
+class FriendLinkApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FriendLink
+        fields = [
+            'id',
+            'site_name',
+            'site_url',
+            'logo_url',
+            'description',
+            'contact_email',
+            'contact_note',
+            'status',
+            'created_at',
+        ]
+        read_only_fields = ['id', 'status', 'created_at']
+
+    def validate_site_name(self, value):
+        normalized = value.strip()
+        if not normalized:
+            raise serializers.ValidationError('Site name is required.')
+        return normalized
+
+    def validate_description(self, value):
+        return value.strip()
+
+    def validate_contact_note(self, value):
+        return value.strip()
+
+    def validate_site_url(self, value):
+        normalized = value.strip()
+        if FriendLink.objects.exclude(status=FriendLink.Status.REJECTED).filter(site_url=normalized).exists():
+            raise serializers.ValidationError('This site URL already has an active application.')
+        return normalized
+
+    def validate_logo_url(self, value):
+        return value.strip()
 
 
 class PostListSerializer(serializers.ModelSerializer):

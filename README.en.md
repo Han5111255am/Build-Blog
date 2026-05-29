@@ -2,7 +2,7 @@
 
 [中文](README.md) | [Demo Personal Blog](https://handsomenanblog.cyou/) | [MIT License](LICENSE)
 
-A full-stack personal blog project with a public blog frontend, an admin dashboard, and a Django REST API. It is suitable for self-hosted technical writing, project showcases, notes, podcasts, and photography.
+A full-stack personal blog project with a public blog frontend, an admin dashboard, and a Django REST API. It is suitable for self-hosted technical writing, project showcases, notes, friend links, podcasts, and photography.
 
 ## Tech Stack
 
@@ -10,7 +10,7 @@ A full-stack personal blog project with a public blog frontend, an admin dashboa
 - Data and queues: MySQL 8, Redis 7, RabbitMQ 3
 - Blog frontend: Vue 3, Vue Router, Vite, Vite SSG, UnoCSS
 - Admin dashboard: React 18, TypeScript, TanStack Router, TanStack Query, React Hook Form, Zod, Tailwind CSS, Vite
-- Content features: Markdown, code highlighting, KaTeX math rendering, HTML sanitization, image and media asset management
+- Content features: Markdown, code highlighting, KaTeX math rendering, HTML sanitization, friend link application and review, image and media asset management
 
 ## Project Structure
 

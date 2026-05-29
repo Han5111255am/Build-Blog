@@ -5,6 +5,7 @@ const zhToEnMap: Record<string, string> = {
   '文章': 'Posts',
   '笔记': 'Notes',
   '项目': 'Projects',
+  '友链': 'Friend Links',
   '标签': 'Tags',
   '素材库': 'Assets',
   '图库': 'Photos',

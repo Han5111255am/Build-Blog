@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils import timezone
-from .models import Post, Note, Project, Photo, Podcast, Tag, Asset
+from .models import Post, Note, Project, Photo, Podcast, Tag, Asset, FriendLink
 from .tasks import render_markdown_task
 from .tasks import render_note_markdown_task, render_podcast_markdown_task
 from .tasks_helpers import (
@@ -29,6 +29,16 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug', 'created_at']
     search_fields = ['name', 'slug']
     prepopulated_fields = {'slug': ('name',)}
+
+
+@admin.register(FriendLink)
+class FriendLinkAdmin(admin.ModelAdmin):
+    list_display = ['site_name', 'status', 'display_order', 'site_url', 'reviewed_at', 'created_at']
+    list_filter = ['status', 'created_at', 'reviewed_at']
+    search_fields = ['site_name', 'site_url', 'description', 'contact_email']
+    list_editable = ['display_order']
+    readonly_fields = ['created_at', 'updated_at']
+    ordering = ['display_order', '-updated_at']
 
 
 # ─── Post ──────────────────────────────────────────────────────────
@@ -255,5 +265,4 @@ class PodcastAdmin(admin.ModelAdmin):
             self.message_user(request, '播客已保存，正在后台渲染 Show Notes...')
         else:
             self.message_user(request, '播客已保存，缓存已更新。')
-
 

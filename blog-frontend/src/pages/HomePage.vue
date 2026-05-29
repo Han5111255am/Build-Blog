@@ -114,23 +114,23 @@
           <img src="/my_icons/github.svg" alt="" class="social-icon social-icon-mono">
           GitHub
         </a>
-        <a href="https://example.com/social/douyin" target="_blank" rel="noopener noreferrer">
+        <a href="https://example.com" >
           <img src="/my_icons/tiktok.svg" alt="" class="social-icon social-icon-mono">
           {{ t('home.douyin') }}
         </a>
-        <a href="https://example.com/social/community" target="_blank" rel="noopener noreferrer">
+        <a href="https://example.com" target="_blank" >
           <img src="/my_icons/linuxdo.svg" alt="" class="social-icon">
           Linux.do
         </a>
-        <a href="https://www.youtube.com/@example" target="_blank" >
+        <a href="https://example.com" target="_blank" >
           <img src="/my_icons/youtube.svg" alt="" class="social-icon social-icon-mono">
           YouTube
         </a>
-        <a href="https://space.bilibili.com/000000" target="_blank">
+        <a href="https://example.com" target="_blank">
           <img src="/my_icons/bilibili.svg" alt="" class="social-icon social-icon-mono">
           {{ t('home.bilibili') }}
         </a>
-        <a href="https://x.com/example" target="_blank">
+        <a href="https://example.com" target="_blank">
           <img src="/my_icons/twitter.svg" alt="" class="social-icon social-icon-mono">
           X
         </a>
@@ -220,6 +220,7 @@ const featuredLinks = [
   { label: 'Blog', to: '/posts' },
   { label: 'Notes', to: '/notes' },
   { label: 'Projects', to: '/projects' },
+  { label: 'Friends', to: '/friends' },
   { label: 'Podcasts', to: '/podcasts' },
   { label: 'Photos', to: '/photos' },
 ]

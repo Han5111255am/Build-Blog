@@ -13,9 +13,11 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.utils import timezone
 from django.utils.feedgenerator import rfc2822_date
 from django.core.cache import cache
-from .models import Post, Note, Project, Photo, Podcast
+from .models import FriendLink, Post, Note, Project, Photo, Podcast
 from .serializers import PostListSerializer, PostDetailSerializer
 from .serializers import (
+    FriendLinkApplicationSerializer,
+    FriendLinkSerializer,
     NoteListSerializer, NoteDetailSerializer,
     ProjectListSerializer, ProjectDetailSerializer,
     PhotoSerializer,
@@ -26,6 +28,7 @@ from .cache_utils import (
     get_post_cache_key,
     generate_cache_key,
     generate_query_params_cache_key,
+    invalidate_pattern,
 )
 from .pagination import (
     PostStreamCursorPagination,
@@ -60,7 +63,7 @@ def _current_published(model_class):
 
 
 def _public_sitemap_entries(request):
-    static_paths = ['/', '/posts', '/notes', '/projects', '/podcasts', '/photos']
+    static_paths = ['/', '/posts', '/notes', '/projects', '/friends', '/friends/apply', '/podcasts', '/photos']
     entries = [
         {
             'loc': _absolute_url(request, path),
@@ -107,6 +110,10 @@ def robots_view(request):
         '',
     ])
     return _xml_response(content, 'text/plain')
+
+
+def invalidate_friend_link_cache():
+    invalidate_pattern('friend-link:list:*')
 
 
 def _public_rss_items():
@@ -214,6 +221,48 @@ class PublicContentViewSet(viewsets.ReadOnlyModelViewSet):
         if request.method == 'GET' and response.status_code in {200, 304}:
             response['Cache-Control'] = PUBLIC_CONTENT_CACHE_CONTROL
         return response
+
+
+class FriendLinkViewSet(PublicContentViewSet, viewsets.GenericViewSet):
+    queryset = FriendLink.objects.none()
+    serializer_class = FriendLinkSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['site_name', 'description']
+    ordering_fields = ['display_order', 'created_at', 'site_name']
+    ordering = ['display_order', '-reviewed_at', '-created_at']
+
+    def get_queryset(self):
+        return FriendLink.objects.filter(status=FriendLink.Status.APPROVED).order_by(
+            'display_order',
+            '-reviewed_at',
+            '-created_at',
+        )
+
+    def list(self, request, *args, **kwargs):
+        cache_key = generate_query_params_cache_key(
+            'friend-link:list',
+            request.query_params,
+            include_keys=['page', 'search', 'ordering'],
+        )
+
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            response = Response(cached_data)
+            response['X-Cache'] = 'HIT'
+            return response
+
+        response = super().list(request, *args, **kwargs)
+        cache.set(cache_key, response.data, 300)
+        response['X-Cache'] = 'MISS'
+        return response
+
+    @action(detail=False, methods=['post'], url_path='apply', permission_classes=[AllowAny], throttle_scope='friend_link_apply')
+    def apply(self, request):
+        serializer = FriendLinkApplicationSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        friend_link = serializer.save(status=FriendLink.Status.PENDING)
+        response_serializer = FriendLinkApplicationSerializer(friend_link)
+        return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
 
 # ─── Post ──────────────────────────────────────────────────────────

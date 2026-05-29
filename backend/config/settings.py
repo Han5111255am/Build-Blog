@@ -69,12 +69,12 @@ BASE_DIR = BACKEND_DIR
 DEBUG = env_bool("DEBUG", True)
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "").strip()
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 if not SECRET_KEY:
     if DEBUG:
         SECRET_KEY = "dev-only-change-me"
     else:
-        raise ImproperlyConfigured("DJANGO_SECRET_KEY is required when DEBUG=False.")
+        raise ImproperlyConfigured("DJANGO_SECRET_KEY must be set when DEBUG=False.")
 
 ALLOWED_HOSTS = env_list("ALLOWED_HOSTS", ["127.0.0.1", "localhost"])
 LOCAL_DEV_TRUSTED_ORIGINS = [
@@ -286,6 +286,7 @@ HEALTH_CHECK_TOKEN = os.getenv('HEALTH_CHECK_TOKEN', '').strip()
 API_ANON_THROTTLE_RATE = os.getenv('API_ANON_THROTTLE_RATE', '120/hour')
 API_USER_THROTTLE_RATE = os.getenv('API_USER_THROTTLE_RATE', '600/hour')
 API_PUBLIC_CONTENT_THROTTLE_RATE = os.getenv('API_PUBLIC_CONTENT_THROTTLE_RATE', '240/hour')
+API_FRIEND_LINK_APPLY_THROTTLE_RATE = os.getenv('API_FRIEND_LINK_APPLY_THROTTLE_RATE', '12/hour')
 API_SEARCH_THROTTLE_RATE = os.getenv('API_SEARCH_THROTTLE_RATE', '30/hour')
 API_HEALTH_THROTTLE_RATE = os.getenv('API_HEALTH_THROTTLE_RATE', '30/hour')
 API_PUBLIC_HEALTH_THROTTLE_RATE = os.getenv('API_PUBLIC_HEALTH_THROTTLE_RATE', '120/hour')
@@ -322,6 +323,7 @@ REST_FRAMEWORK = {
         'anon': API_ANON_THROTTLE_RATE,
         'user': API_USER_THROTTLE_RATE,
         'public_content': API_PUBLIC_CONTENT_THROTTLE_RATE,
+        'friend_link_apply': API_FRIEND_LINK_APPLY_THROTTLE_RATE,
         'search': API_SEARCH_THROTTLE_RATE,
         'health': API_HEALTH_THROTTLE_RATE,
         'health_public': API_PUBLIC_HEALTH_THROTTLE_RATE,

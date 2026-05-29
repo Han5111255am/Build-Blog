@@ -27,6 +27,9 @@
           <RouterLink :class="navClass('/posts')" to="/posts" title="Blog">{{ t('nav.blog') }}</RouterLink>
           <RouterLink :class="navClass('/notes')" to="/notes" title="Notes">{{ t('nav.notes') }}</RouterLink>
           <RouterLink :class="navClass('/projects')" to="/projects" title="Projects">{{ t('nav.projects') }}</RouterLink>
+          <RouterLink :class="iconClass('/friends')" to="/friends" :aria-label="t('nav.friends')" :title="t('nav.friends')">
+            <AppIcon name="friends" />
+          </RouterLink>
           <RouterLink :class="iconClass('/podcasts')" to="/podcasts" aria-label="Podcasts" :title="t('nav.podcasts')">
             <AppIcon name="podcast" />
           </RouterLink>

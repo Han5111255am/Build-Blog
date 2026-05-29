@@ -24,6 +24,7 @@ const navItems: NavItem[] = [
   { to: '/posts', label: '文章', icon: 'posts', group: 'content' },
   { to: '/notes', label: '笔记', icon: 'notes', group: 'content' },
   { to: '/projects', label: '项目', icon: 'projects', group: 'content' },
+  { to: '/friend-links', label: '友链', icon: 'friendLinks', group: 'content' },
   { to: '/tags', label: '标签', icon: 'tags', group: 'content' },
   { to: '/assets', label: '素材库', icon: 'assets', group: 'content' },
   { to: '/photos', label: '图库', icon: 'photos', group: 'content' },

@@ -5,6 +5,7 @@ type IconName =
   | 'posts'
   | 'notes'
   | 'projects'
+  | 'friendLinks'
   | 'tags'
   | 'assets'
   | 'photos'
@@ -62,6 +63,14 @@ export function Icon({ name, ...props }: IconProps) {
           <path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h11A2.5 2.5 0 0 1 20 7.5v9A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5z" />
           <path d="M8 5V3.5h8V5" />
           <path d="M4 10.5h16" />
+        </svg>
+      )
+    case 'friendLinks':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...props}>
+          <path d="M8.4 12.7 6.9 14.2a3.7 3.7 0 0 0 5.2 5.2l2.2-2.2a3.7 3.7 0 0 0 0-5.2" />
+          <path d="m15.6 11.3 1.5-1.5a3.7 3.7 0 0 0-5.2-5.2L9.7 6.8a3.7 3.7 0 0 0 0 5.2" />
+          <path d="m9.8 14.2 4.4-4.4" />
         </svg>
       )
     case 'tags':

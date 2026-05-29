@@ -47,6 +47,30 @@ export async function requestJSON(path, params = {}) {
   return payload
 }
 
+export async function sendJSON(path, payload = {}) {
+  const response = await fetch(createEndpoint(path), {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  })
+
+  const isJSON = response.headers.get('content-type')?.includes('application/json')
+  const data = isJSON ? await response.json() : null
+
+  if (!response.ok) {
+    throw new ApiError(
+      data?.detail || data?.message || '请求失败，请稍后重试。',
+      response.status,
+      data,
+    )
+  }
+
+  return data
+}
+
 export function fetchCollection(kind, page = 1, extraParams = {}) {
   return requestJSON(`/${kind}/`, {
     page,
@@ -56,6 +80,31 @@ export function fetchCollection(kind, page = 1, extraParams = {}) {
 
 export function fetchHomeAggregate() {
   return requestJSON('/posts/home/')
+}
+
+export function fetchFriendLinks(page = 1) {
+  return fetchCollection('friend-links', page, {
+    ordering: 'display_order',
+  })
+}
+
+export async function fetchAllFriendLinks() {
+  const results = []
+  let page = 1
+  let hasNext = true
+
+  while (hasNext) {
+    const payload = await fetchFriendLinks(page)
+    results.push(...(payload.results || []))
+    hasNext = Boolean(payload.next)
+    page += 1
+  }
+
+  return results
+}
+
+export function applyFriendLink(payload) {
+  return sendJSON('/friend-links/apply/', payload)
 }
 
 export function fetchDetail(kind, slug, extraParams = {}) {

@@ -29,6 +29,38 @@ class MotionLevelChoices(models.TextChoices):
     REDUCED = 'reduced', 'Reduced'
 
 
+class FriendLink(models.Model):
+    class Status(models.TextChoices):
+        PENDING = 'pending', 'Pending'
+        APPROVED = 'approved', 'Approved'
+        REJECTED = 'rejected', 'Rejected'
+        HIDDEN = 'hidden', 'Hidden'
+
+    site_name = models.CharField(max_length=120)
+    site_url = models.URLField(max_length=500, unique=True)
+    logo_url = models.URLField(max_length=500)
+    description = models.CharField(max_length=240, blank=True)
+    contact_email = models.EmailField(blank=True)
+    contact_note = models.CharField(max_length=500, blank=True)
+    review_note = models.CharField(max_length=500, blank=True)
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING, db_index=True)
+    display_order = models.IntegerField(default=0)
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'friend_links'
+        ordering = ['display_order', '-reviewed_at', '-created_at']
+        indexes = [
+            models.Index(fields=['status', 'display_order'], name='idx_friend_link_status_order'),
+            models.Index(fields=['created_at'], name='idx_friend_link_created_at'),
+        ]
+
+    def __str__(self):
+        return self.site_name
+
+
 # ─── Tag ───────────────────────────────────────────────────────────
 
 
@@ -297,5 +329,4 @@ class Podcast(models.Model):
 
     def __str__(self):
         return self.title
-
 

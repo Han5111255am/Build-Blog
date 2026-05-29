@@ -5,7 +5,8 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "personal-blog-backend"
 version = "0.2.0"
-description = "Django backend for a self-hosted personal blog."
+description = "Django backend for a full-stack personal blog."
+readme = "README.md"
 requires-python = ">=3.13,<3.14"
 dependencies = [
     "Django==5.2.11",

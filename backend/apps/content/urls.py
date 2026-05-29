@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 from apps.content.admin_views import (
     AccountSettingsView,
     AdminAssetViewSet,
+    AdminFriendLinkViewSet,
     AdminNoteViewSet,
     AdminPhotoViewSet,
     AdminPostViewSet,
@@ -28,6 +29,7 @@ from apps.content.admin_views import (
 )
 from apps.content.views import (
     PostViewSet,
+    FriendLinkViewSet,
     NoteViewSet,
     ProjectViewSet,
     PhotoViewSet,
@@ -47,6 +49,7 @@ router.register(r'notes', NoteViewSet, basename='note')
 router.register(r'projects', ProjectViewSet, basename='project')
 router.register(r'photos', PhotoViewSet, basename='photo')
 router.register(r'podcasts', PodcastViewSet, basename='podcast')
+router.register(r'friend-links', FriendLinkViewSet, basename='friend-link')
 
 admin_router = DefaultRouter()
 admin_router.register(r'posts', AdminPostViewSet, basename='admin-post')
@@ -56,6 +59,7 @@ admin_router.register(r'assets', AdminAssetViewSet, basename='admin-asset')
 admin_router.register(r'photos', AdminPhotoViewSet, basename='admin-photo')
 admin_router.register(r'podcasts', AdminPodcastViewSet, basename='admin-podcast')
 admin_router.register(r'projects', AdminProjectViewSet, basename='admin-project')
+admin_router.register(r'friend-links', AdminFriendLinkViewSet, basename='admin-friend-link')
 
 urlpatterns = [
     path('sitemap.xml', sitemap_view, name='public-sitemap'),
